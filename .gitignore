@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+source/Q1/q1_input.json
+source/Q1/q1_result.json
+source/Q2/q2_input.json
+source/Q2/q2_result.json
+source/Q3/results/
+source/Q4/results/
+source/Q3/runs/
+source/Q4/runs/
