@@ -84,7 +84,7 @@ def main() -> int:
     typ_path = OUTPUT_STEM.with_suffix(".typ")
     pdf_path = OUTPUT_STEM.with_suffix(".pdf")
     epub_path = OUTPUT_STEM.with_suffix(".epub")
-    common = [pandoc, *md, "-f", "markdown+tex_math_dollars+tex_math_single_backslash", "--toc",
+    common = [pandoc, *md, "-f", "markdown+tex_math_dollars+tex_math_single_backslash-citations", "--toc",
               "--metadata", "title=无线电干扰源定位与清除：七天答辩教材",
               "--metadata", "lang=zh-CN"]
 
