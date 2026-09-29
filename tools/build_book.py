@@ -54,13 +54,16 @@ def main() -> int:
     typ_path = OUTPUT_STEM.with_suffix(".typ")
     pdf_path = OUTPUT_STEM.with_suffix(".pdf")
     epub_path = OUTPUT_STEM.with_suffix(".epub")
-    common = [pandoc, *md, "-f", "markdown+tex_math_dollars", "--toc",
+    common = [pandoc, *md, "-f", "markdown+tex_math_dollars+tex_math_single_backslash", "--toc",
               "--metadata", "title=无线电干扰源定位与清除：七天答辩教材",
               "--metadata", "lang=zh-CN"]
 
     run([*common, "-t", "typst", "-s", "-V", f"mainfont={FONT}",
          "-o", str(typ_path)])
     typ_source = typ_path.read_text(encoding="utf-8")
+    # Pandoc 3.1 emits `sect` for TeX's intersection glyph, while Typst 0.15
+    # calls that symbol `inter`. Define the alias rather than dropping math.
+    typ_source = "#let sect = sym.inter\n" + typ_source
     typ_source = typ_source.replace('paper: "us-letter"', 'paper: "a4"')
     typ_source = typ_source.replace('margin: (x: 1.25in, y: 1.25in)',
                                     'margin: (x: 22mm, y: 20mm)')

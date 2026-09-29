@@ -23,7 +23,7 @@
 | `examples/q2_seed_20260929_quick_result.json` | Q2 缩短采样的两种目标独立选址对照结果。 |
 | `examples/q3_seed_20260929_3cases.json` | Q3 三局本地模拟原始汇总记录，可核对逐局状态与虚拟时间。 |
 | `examples/q4_seed_20260929_3cases.json` | Q4 三局本地模拟原始汇总记录，可核对定向源数、成对探测与虚拟时间。 |
-| `tools/build_book.py` | 将七章 Markdown 合成可编辑 Typst、A4 PDF 与 EPUB 的构建脚本；需要本机 Pandoc、Typst 和 Noto Sans SC 字体。 |
+| `tools/build_book.py` | 将七章 Markdown（含反斜杠形式公式）合成可编辑 Typst、A4 PDF 与 EPUB 的构建脚本；需要本机 Pandoc、Typst 和 Noto Sans SC 字体。 |
 
 `source/` 仅恢复上传时被平铺并加序号的源码文件名和 Q1–Q4 目录，内容不作算法修改。题目 PDF、论文、数据表及私人材料暂不纳入仓库。教材在后续阶段形成后，这里会逐一登记路径和用途。
 
