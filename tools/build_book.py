@@ -13,6 +13,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import atexit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +37,27 @@ def run(args: list[str]) -> None:
     subprocess.run(args, cwd=ROOT, check=True)
 
 
+def normalize_for_pandoc(source: str) -> str:
+    """Adapt supported TeX spelling to Pandoc 3.1's Typst math converter."""
+    source = re.sub(r"\\rm\s+([A-Za-z]+)", r"\\mathrm{\1}", source)
+    # The converter emits an invalid Typst `#box` within some equations.
+    # Keep the complete equation while omitting only its visual frame.
+    while "\\boxed{" in source:
+        start = source.index("\\boxed{")
+        pos, depth = start + len("\\boxed{"), 1
+        while depth and pos < len(source):
+            if source[pos] == "{":
+                depth += 1
+            elif source[pos] == "}":
+                depth -= 1
+            pos += 1
+        if depth:
+            raise ValueError("Unbalanced \\boxed expression")
+        source = source[:start] + source[start + len("\\boxed{"):pos - 1] + source[pos:]
+    source = source.replace("](../source/", "](https://github.com/SOMEBODYJUN/work-web/blob/main/source/")
+    return source
+
+
 def main() -> int:
     absent = [str(p.relative_to(ROOT)) for p in CHAPTERS if not p.is_file()]
     if absent:
@@ -50,7 +73,14 @@ def main() -> int:
         print("CJK_FONT_DIR 不是文件夹。", file=sys.stderr)
         return 2
 
-    md = [str(p.relative_to(ROOT)) for p in CHAPTERS]
+    temp_dir = Path(tempfile.mkdtemp(prefix="_book_sources_", dir=ROOT))
+    atexit.register(lambda: shutil.rmtree(temp_dir, ignore_errors=True))
+    normalized = []
+    for original in CHAPTERS:
+        target = temp_dir / original.name
+        target.write_text(normalize_for_pandoc(original.read_text(encoding="utf-8")), encoding="utf-8")
+        normalized.append(target)
+    md = [str(p) for p in normalized]
     typ_path = OUTPUT_STEM.with_suffix(".typ")
     pdf_path = OUTPUT_STEM.with_suffix(".pdf")
     epub_path = OUTPUT_STEM.with_suffix(".epub")
@@ -63,7 +93,7 @@ def main() -> int:
     typ_source = typ_path.read_text(encoding="utf-8")
     # Pandoc 3.1 emits `sect` for TeX's intersection glyph, while Typst 0.15
     # calls that symbol `inter`. Define the alias rather than dropping math.
-    typ_source = "#let sect = sym.inter\n" + typ_source
+    typ_source = "#let sect = sym.inter\n#let diff = sym.partial\n" + typ_source
     typ_source = typ_source.replace('paper: "us-letter"', 'paper: "a4"')
     typ_source = typ_source.replace('margin: (x: 1.25in, y: 1.25in)',
                                     'margin: (x: 22mm, y: 20mm)')
