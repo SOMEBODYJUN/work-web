@@ -1,0 +1,2 @@
+# Python >= 3.10
+# No third-party packages are required; the programs use the standard library only.
