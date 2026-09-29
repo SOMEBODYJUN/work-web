@@ -35,8 +35,14 @@ LESSONS = [
 def run(args: list[str], *, env: dict[str, str], cwd: Path) -> None:
     result = subprocess.run(args, cwd=cwd, env=env, text=True, capture_output=True)
     if result.returncode:
+        errors = "\n".join(
+            line for line in (result.stdout + result.stderr).splitlines()
+            if line.startswith("!") or "Error producing PDF" in line or "Fatal error" in line
+        )
         raise RuntimeError(
-            f"{args[0]} 失败：\n" + (result.stdout + result.stderr)[-6000:]
+            f"{args[0]} 失败 (exit {result.returncode})：\n" + errors + "\n"
+            + (result.stdout + result.stderr)[:2200] + "\n...\n"
+            + (result.stdout + result.stderr)[-800:]
         )
 
 
@@ -72,12 +78,20 @@ def main() -> int:
             )
             env["FONTCONFIG_FILE"] = str(font_config)
             run(["fc-cache", "-f", str(directory)], env=env, cwd=work)
-        match = subprocess.run(
-            ["fc-match", "-f", "%{family}", "Noto Serif CJK SC"],
-            capture_output=True, text=True, env=env, check=True
-        ).stdout
-        if "Noto Serif CJK SC" not in match:
-            raise SystemExit("缺少 Noto Serif CJK SC 字体；请设置 COURSE_CJK_FONT_DIR。")
+        def available_font(candidates: list[str]) -> str:
+            for candidate in candidates:
+                match = subprocess.run(
+                    ["fc-match", "-f", "%{family}", candidate],
+                    capture_output=True, text=True, env=env, check=True
+                ).stdout
+                if candidate in match:
+                    return candidate
+            raise SystemExit("缺少中文 Noto 字体；请设置 COURSE_CJK_FONT_DIR。")
+
+        # Static CJK OTFs work with XeTeX/xdvipdfmx; the variable SC TTFs may
+        # match fontconfig but fail when embedded into the final PDF.
+        serif_font = available_font(["Noto Serif CJK SC"])
+        sans_font = available_font(["Noto Sans CJK SC"])
 
         available_format = subprocess.run(
             ["kpsewhich", "xelatex.fmt"], capture_output=True, env=env
@@ -130,8 +144,8 @@ def main() -> int:
             "-V", "geometry:margin=20mm",
             "-V", "fontsize=11pt",
             "-V", "linestretch=1.2",
-            "-V", "mainfont=Noto Serif CJK SC",
-            "-V", "sansfont=Noto Sans CJK SC",
+            "-V", f"mainfont={serif_font}",
+            "-V", f"sansfont={sans_font}",
             "-M", "lang=zh-CN",
             "-M", "title=从经典例题到 B 题：七天答辩入门教材",
             "-M", "subtitle=先学方法，再做赛题，最后读源码",
