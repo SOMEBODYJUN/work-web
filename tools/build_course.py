@@ -31,6 +31,8 @@ LESSONS = [
     COURSE / "03_覆盖路径与在线决策.md",
     COURSE / "04_集合定位与定向盲区.md",
     COURSE / "09_从模型到程序的逐行追踪.md",
+    COURSE / "11_关键循环的执行轨迹与答案.md",
+    COURSE / "12_真实复算与动作计时.md",
     COURSE / "05_答辩练习与代码导航.md",
 ]
 
