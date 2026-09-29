@@ -52,6 +52,7 @@
 | `course/figures/q4_pair_probe.png` | 第 7 课锚点、两探测点、假想源及交点的几何证明图（纵轴放大）。 |
 | `tools/make_pair_probe_figure.py` | 重建第 7 课成对探测图。 |
 | `tools/build_course.py` | 将课程清单中的十一个 Markdown 文件排成主教材 PDF；需 Pandoc、XeLaTeX 和 Noto CJK 字体，可用 `COURSE_CJK_FONT_DIR` 指定字体目录。 |
+| `tools/check_atlas_coverage.py` | 检查四份源码伴读是否覆盖所有非空物理行；Q3/Q4 本地与正式版共享的相同前缀只计一次。行号覆盖不等于解释正确，仍需人工核读。 |
 
 `source/` 仅恢复上传时被平铺并加序号的源码文件名和 Q1–Q4 目录，内容不作算法修改。题目 PDF、论文、数据表及私人材料不纳入仓库。
 
