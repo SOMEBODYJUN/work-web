@@ -1,6 +1,15 @@
 # 可复现的本地小样例
 
-这些 JSON 是当前上传源码生成的本地模拟记录，用于学习代码状态和核对时间分解，**不是官方演练或正式成绩**。运行环境：Python 3.12.14；源程序位于 ../source/Q3 与 ../source/Q4；命令中的输出路径可自行修改。
+这些 JSON 是当前上传源码生成的输入、求解或本地模拟记录，用于学习代码状态和核对时间分解，**不是官方演练或正式成绩**。运行环境：Python 3.12.14；源程序位于 ../source/Q1–Q4；命令中的输出路径可自行修改。
+
+从仓库根目录运行 Q1、Q2：
+
+    python source/Q1/q1_generator.py --seed 20260929 --output examples/q1_seed_20260929_input.json
+    python source/Q1/q1_solver.py --input examples/q1_seed_20260929_input.json --output examples/q1_seed_20260929_result.json
+    python source/Q2/q2_generator.py --seed 20260929 --output examples/q2_seed_20260929_input.json
+    python source/Q2/q2_solver.py --input examples/q2_seed_20260929_input.json --output examples/q2_seed_20260929_quick_result.json --quick
+
+Q1 为 6 顶点有界多边形，直径 44.458564 m、面积 773.517257 m²，该案例的直径圆覆盖为 true；这不意味着所有案例都覆盖。Q2 在缩短采样的 --quick 模式下比较 600、700、800、900、1000 m 基线；本例直径目标与最小包围圆目标恰好选择同一个第二站 $(-1145.108945,-213.282190)$ m，所评读数中的最坏包围圆半径约 55.819929 m、直径约 111.639857 m。两方案在这一局同点，不能据此宣称一种方法优于另一种；也没有 20 m 清除证书。
 
 从仓库根目录执行：
 

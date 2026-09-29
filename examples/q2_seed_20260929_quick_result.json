@@ -1,0 +1,108 @@
+{
+  "case_id": "Q2-seed-20260929",
+  "first_station_m": [
+    -245.09424208875873,
+    222.57734388382218
+  ],
+  "first_bearing_deg": 239.09,
+  "error_half_width_deg": 1.0,
+  "safety_domain": "uniform1000",
+  "main_method": "Q2最小包围圆方法",
+  "comparison": [
+    {
+      "method": "Q1直径方法",
+      "baseline_m": 1000.0,
+      "psi_deg": -33.25,
+      "a_m": 836.2861558477596,
+      "b_m": -548.2932295199138,
+      "second_station_m": [
+        -1145.1089454857736,
+        -213.28219044941164
+      ],
+      "worst_R_m": 55.81992860320586,
+      "worst_D_m": 111.6398570064117,
+      "worst_A_m2": 2188.8690995741636,
+      "report_at_worst_R_deg": 280.9772292406169,
+      "meets_20m_on_evaluated_reports": false
+    },
+    {
+      "method": "Q2最小包围圆方法",
+      "baseline_m": 1000.0,
+      "psi_deg": -33.25,
+      "a_m": 836.2861558477596,
+      "b_m": -548.2932295199138,
+      "second_station_m": [
+        -1145.1089454857736,
+        -213.28219044941164
+      ],
+      "worst_R_m": 55.81992860320586,
+      "worst_D_m": 111.6398570064117,
+      "worst_A_m2": 2188.8690995741636,
+      "report_at_worst_R_deg": 280.9772292406169,
+      "meets_20m_on_evaluated_reports": false
+    }
+  ],
+  "baseline_search": [
+    {
+      "objective": "D",
+      "baseline_m": 600.0,
+      "psi_deg": -25.562840627790568,
+      "objective_value": 256.9239683641183
+    },
+    {
+      "objective": "D",
+      "baseline_m": 700.0,
+      "psi_deg": -33.047732369991536,
+      "objective_value": 186.58763570663803
+    },
+    {
+      "objective": "D",
+      "baseline_m": 800.0,
+      "psi_deg": -37.04750745361986,
+      "objective_value": 151.46384773626784
+    },
+    {
+      "objective": "D",
+      "baseline_m": 900.0,
+      "psi_deg": -38.27389294001016,
+      "objective_value": 129.14962487280317
+    },
+    {
+      "objective": "D",
+      "baseline_m": 1000.0,
+      "psi_deg": -33.25,
+      "objective_value": 111.63985667995749
+    },
+    {
+      "objective": "R",
+      "baseline_m": 600.0,
+      "psi_deg": -25.562840627790568,
+      "objective_value": 128.46198428205918
+    },
+    {
+      "objective": "R",
+      "baseline_m": 700.0,
+      "psi_deg": -33.047732369991536,
+      "objective_value": 93.29381795331902
+    },
+    {
+      "objective": "R",
+      "baseline_m": 800.0,
+      "psi_deg": -37.04750745361986,
+      "objective_value": 75.73192396813391
+    },
+    {
+      "objective": "R",
+      "baseline_m": 900.0,
+      "psi_deg": -38.27389294001016,
+      "objective_value": 64.57481253640158
+    },
+    {
+      "objective": "R",
+      "baseline_m": 1000.0,
+      "psi_deg": -33.25,
+      "objective_value": 55.819928439978746
+    }
+  ],
+  "note": "Q1对照会独立按最坏直径重新选点；内层连续示向度最坏值由有限网格和局部细化数值近似。"
+}

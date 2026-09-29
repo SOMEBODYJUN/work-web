@@ -15,7 +15,11 @@
 | `book/00_导读与七天训练.md` | 教材阅读顺序、四问总图、证明与实验边界、35 小时训练和口头回答框架。 |
 | `book/06_答辩追问与推导演练.md` | 40 个按题设、四问几何/策略、协议和证据分类的追问答案及七组纸笔演练。 |
 | `.gitignore` | 排除运行时缓存、随机输入输出和本地/正式测试日志，避免误提交。 |
-| `examples/README.md` | Q3/Q4 固定基种子的三局本地演示命令、统计和阅读路径。 |
+| `examples/README.md` | Q1–Q4 固定种子的本地演示命令、统计和阅读路径。 |
+| `examples/q1_seed_20260929_input.json` | Q1 四站固定种子输入。 |
+| `examples/q1_seed_20260929_result.json` | Q1 有界多边形、直径与直径圆判定结果。 |
+| `examples/q2_seed_20260929_input.json` | Q2 首站固定种子输入。 |
+| `examples/q2_seed_20260929_quick_result.json` | Q2 缩短采样的两种目标独立选址对照结果。 |
 | `examples/q3_seed_20260929_3cases.json` | Q3 三局本地模拟原始汇总记录，可核对逐局状态与虚拟时间。 |
 | `examples/q4_seed_20260929_3cases.json` | Q4 三局本地模拟原始汇总记录，可核对定向源数、成对探测与虚拟时间。 |
 
