@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine the seven Markdown chapters into editable Typst, PDF and EPUB.
+"""Combine the seven Markdown chapters into editable Typst and PDF.
 
 Requires pandoc 3.x, typst, and a locally installed Noto Sans SC font.
 Set TYPST_BIN and CJK_FONT_DIR if they are not on default search paths.
@@ -83,8 +83,7 @@ def main() -> int:
     md = [str(p) for p in normalized]
     typ_path = OUTPUT_STEM.with_suffix(".typ")
     pdf_path = OUTPUT_STEM.with_suffix(".pdf")
-    epub_path = OUTPUT_STEM.with_suffix(".epub")
-    common = [pandoc, *md, "-f", "markdown+tex_math_dollars+tex_math_single_backslash-citations", "--toc",
+    common = [pandoc, *md, "-f", "markdown+tex_math_dollars+tex_math_single_backslash-citations", "--toc", "--toc-depth=1",
               "--metadata", "title=无线电干扰源定位与清除：七天答辩教材",
               "--metadata", "lang=zh-CN"]
 
@@ -96,20 +95,21 @@ def main() -> int:
     typ_source = "#let sect = sym.inter\n#let diff = sym.partial\n" + typ_source
     typ_source = typ_source.replace('paper: "us-letter"', 'paper: "a4"')
     typ_source = typ_source.replace('margin: (x: 1.25in, y: 1.25in)',
-                                    'margin: (x: 22mm, y: 20mm)')
+                                    'margin: (x: 20mm, y: 18mm)')
     typ_source = typ_source.replace('lang: "en"', 'lang: "zh"')
     typ_source = typ_source.replace('region: "US"', 'region: "CN"')
     typ_source = typ_source.replace('fontsize: 11pt', 'fontsize: 10.5pt')
-    # Keep the generated title and outline, then start each subsequent chapter
-    # on a new page. A chapter begins with a top-level Typst heading.
+    # Pandoc 3.1's Typst writer emits depth: none even with --toc-depth.
+    typ_source = typ_source.replace('depth: none', 'depth: 1', 1)
+    # Keep the generated title and outline on their own page; start each
+    # chapter on a new page. A chapter begins with a top-level Typst heading.
     starts = list(re.finditer(r"(?m)^= [^\n]+$", typ_source))
-    for match in reversed(starts[1:]):
+    for match in reversed(starts):
         typ_source = typ_source[:match.start()] + "#pagebreak()\n" + typ_source[match.start():]
     typ_path.write_text(typ_source, encoding="utf-8")
 
     run([typst, "compile", "--font-path", font_dir, str(typ_path), str(pdf_path)])
-    run([*common, "-t", "epub3", "-o", str(epub_path)])
-    print("Created:", pdf_path, epub_path, typ_path)
+    print("Created:", pdf_path, typ_path)
     return 0
 
 
