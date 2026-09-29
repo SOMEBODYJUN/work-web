@@ -66,6 +66,23 @@ def main() -> int:
             if missing:
                 print("  missing:", missing[:60], "..." if len(missing) > 60 else "")
                 failed = True
+    # The shared dependency list is explained once in the Q4 appendix.
+    dependency = ROOT / "source" / "requirements.txt"
+    if dependency.is_file():
+        chapter = sections(
+            (ATLAS / "Q4_逐行伴读.md").read_text(encoding="utf-8"),
+            ["requirements.txt"],
+        )["requirements.txt"]
+        lines = dependency.read_text(encoding="utf-8").splitlines()
+        required = {i for i, line in enumerate(lines, 1) if line.strip()}
+        covered = set()
+        for a, b in MARKER.findall(chapter):
+            covered.update(range(int(a), int(b or a) + 1))
+        missing = sorted(required - covered)
+        print(f"source/requirements.txt: {len(required) - len(missing)}/{len(required)} nonblank lines covered")
+        if missing:
+            print("  missing:", missing)
+            failed = True
     return 1 if failed else 0
 
 
