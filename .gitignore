@@ -10,3 +10,9 @@ source/Q3/runs/
 source/Q4/runs/
 _book_sources_*/
 tmp/
+.course_fonts/
+course/_qa/
+course/_qa_final/
+course/_debug.tex
+course/_latest.txt
+course/_course_build_*/
