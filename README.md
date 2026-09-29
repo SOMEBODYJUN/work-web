@@ -31,8 +31,11 @@
 | `examples/q4_seed_20260929_3cases.json` | Q4 三局本地模拟原始汇总记录，可核对定向源数、成对探测与虚拟时间。 |
 | `tools/build_book.py` | 将七章 Markdown（含反斜杠形式公式）合成可编辑 Typst 与 A4 PDF；转换时规范旧式数学命令、保留批处理字面量并把源码相对链接指向仓库。需要本机 Pandoc、Typst 和 Noto Sans SC 字体。 |
 | `course/00_怎样使用这本教材.md` | 面向零基础队员的重新编排：经典例题先行、比赛题作课后应用的七天课表、逐课验收和掌握层级。 |
+| `course/02_直径包围圆与鲁棒选址.md` | 新版第 3–4 课：凸多边形直径、旋转卡壳、消防站与最小包围圆、极小极大及黄金分割；先经典例题，再将 Q1/Q2 作为课后应用并对照源码。 |
 | `course/figures/` | 角楔、凸包、裁剪、包围圆、极小极大、插入路线、定向观测的原创教学图。 |
 | `tools/make_course_figures.py` | 使用 Matplotlib 重建 `course/figures/` 中的七张教学图。 |
+| `course/figures/08_calipers.png` | 第 3 课旋转卡壳支撑线的教学补充图。 |
+| `tools/make_optimization_figures.py` | 重建旋转卡壳教学图。 |
 
 `source/` 仅恢复上传时被平铺并加序号的源码文件名和 Q1–Q4 目录，内容不作算法修改。题目 PDF、论文、数据表及私人材料不纳入仓库。
 
