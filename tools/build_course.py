@@ -24,10 +24,13 @@ COURSE = ROOT / "course"
 OUTPUT = COURSE / "从经典例题到B题_七天入门教材.pdf"
 LESSONS = [
     COURSE / "00_怎样使用这本教材.md",
+    COURSE / "10_四问统一题设与模型总图.md",
+    COURSE / "08_七天训练与标准解答.md",
     COURSE / "01_从坐标到凸包与角楔.md",
     COURSE / "02_直径包围圆与鲁棒选址.md",
     COURSE / "03_覆盖路径与在线决策.md",
     COURSE / "04_集合定位与定向盲区.md",
+    COURSE / "09_从模型到程序的逐行追踪.md",
     COURSE / "05_答辩练习与代码导航.md",
 ]
 
