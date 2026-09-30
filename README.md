@@ -61,6 +61,10 @@
 | `course/figures/06_negative_outer_hull.png` | 一次无信号删盘后取凸包外包的三联图。 |
 | `course/figures/07_q4_25_stations.png` | Q4 中心、内环、外环和一个 45° 环带的三角剖分。 |
 | `course/figures/12_golden_section.png` | 黄金分割搜索的函数比较、舍弃区间与旧点复用图。 |
+| `course/figures/04_q2_safe_stations.png` | 第 4 课章末：两个候选源的接收圆盘和安全第二站的交集。 |
+| `course/figures/04_q2_worst_angle.png` | 第 4 课章末：扇区对侧边缘与第二站基线之间的最大夹角。 |
+| `course/figures/07_pair_negative_intro.png` | 第 7 课普通坐标例：正锚点、成对负探点、假想远源及交点。 |
+| `course/reviews/新版新生盲读_20260930.md` | 独立读者只看 117 页主教材的教学可读性验收：五道换数据题的先做后核，以及新插图前的剩余台阶。 |
 | `tools/make_geometry_lesson_figures.py` | 重建两站测高、CGAL 五点凸包及叉积方向的四张图。 |
 | `course/figures/08_calipers.png` | 第 3 课旋转卡壳支撑线的教学补充图。 |
 | `tools/make_optimization_figures.py` | 重建旋转卡壳教学图。 |
@@ -73,7 +77,7 @@
 
 ## 当前教材与阅读顺序
 
-主教材为 course/从经典例题到B题_七天入门教材.pdf（117 页）。简短入口后直接读七课，先用小数字建立通用模型，再做带答案练习与 B 题章末代换；四问总览、七日训练、源码追踪和复算放在后部。第 5 课从开放路线的六种顺序推导在线插入，再单独解释覆盖。四份逐行伴读未改动，作为课后程序查阅册。
+主教材为 course/从经典例题到B题_七天入门教材.pdf。简短入口后直接读七课，先用小数字建立通用模型，再做带答案练习与 B 题章末代换；四问总览、七日训练、源码追踪和复算放在后部。第 5 课从开放路线的六种顺序推导在线插入，再单独解释覆盖。第 4 课增加安全站位交集与角度图，第 7 课把双负证明图放在首次推导处，第 6 课增加跨越清除阈值的换数据题及答案。四份逐行伴读未改动，作为课后程序查阅册。
 
 先读 course/00_怎样使用这本教材.md 的七天安排，随后从第 1 课顺序学习；每课遮住答案重算一般例题和 B 题，随后打开 source/ 中对应函数。配套的 course/四问源码逐行伴读_练习与答案.pdf 可离线查原始行号和标准答案；按行号精确搜索则用 `course/code_atlas/` 中的 Markdown。source/README.md 给运行方法，examples/ 给固定种子结果。book/ 的旧 132 页版仅供技术查阅。
 

@@ -114,3 +114,62 @@ ax.annotate("reused c",(c,0),(2.55,.3),arrowprops=dict(arrowstyle="->"),color=or
 ax.set_xlim(-.2,6.8);ax.set_ylim(-.35,2.4);ax.set_yticks([]);ax.set_xlabel("x");ax.grid(axis="x",alpha=.13)
 fig.tight_layout();fig.savefig(OUT/"12_golden_section.png",dpi=180,bbox_inches="tight");plt.close(fig)
 print(OUT/"12_golden_section.png")
+
+# Q2: a safe station must lie in every candidate source's reception disk.
+fig, ax = plt.subplots(figsize=(6.4, 4.5))
+xx, yy = np.meshgrid(np.linspace(-3.1, 3.1, 420), np.linspace(-2.5, 2.5, 340))
+g1, g2, radius = np.array((-1., 0.)), np.array((1., 0.)), 2.
+safe = ((xx-g1[0])**2+(yy-g1[1])**2 <= radius**2) & ((xx-g2[0])**2+(yy-g2[1])**2 <= radius**2)
+ax.contourf(xx, yy, safe.astype(float), levels=[.5, 1.5], colors=["#d9eee9"])
+for g, label, color in [(g1, "g1", blue), (g2, "g2", orange)]:
+    ax.add_patch(Circle(g, radius, fill=False, ec=color, lw=2))
+    ax.scatter(*g, color=color, s=50, zorder=4)
+    ax.annotate(label, g, xytext=(7, 8), textcoords="offset points", fontsize=11)
+ax.scatter([0.], [0.], c=green, s=60, zorder=5)
+ax.annotate("safe station s", (0,0), (.23,.28), arrowprops={"arrowstyle":"->"}, color=green)
+ax.annotate("intersection of disks", (0,-1.5), (-2.5,-2.25),
+            arrowprops={"arrowstyle":"->"}, color=green)
+ax.set(xlim=(-3.1,3.1), ylim=(-2.5,2.5), xlabel="x", ylabel="y")
+ax.set_aspect("equal"); ax.grid(alpha=.12)
+fig.tight_layout(); fig.savefig(OUT/"04_q2_safe_stations.png",dpi=180,bbox_inches="tight"); plt.close(fig)
+print(OUT/"04_q2_safe_stations.png")
+
+# Q2: the far source on the opposite wedge edge determines the worst angle.
+fig, ax = plt.subplots(figsize=(7.3, 4.5))
+L, far_r, psi, eta = 1000., 1500., np.deg2rad(32.), np.deg2rad(-1.)
+s = L*np.array((np.cos(psi), np.sin(psi)))
+g = far_r*np.array((np.cos(eta), np.sin(eta)))
+for angle in [-1., 1.]:
+    unit=np.array((np.cos(np.deg2rad(angle)),np.sin(np.deg2rad(angle))))
+    ax.plot([0,1600*unit[0]],[0,1600*unit[1]],ls="--",c=green,lw=1.5)
+ax.plot([0,s[0]],[0,s[1]],color=blue,lw=2,label="baseline L")
+ax.plot([0,g[0]],[0,g[1]],color=orange,lw=2,label="source range r")
+ax.plot([s[0],g[0]],[s[1],g[1]],color="#bd3434",lw=2,label="reception distance")
+ax.scatter([0,s[0],g[0]],[0,s[1],g[1]],c=[green,blue,orange],s=60,zorder=5)
+ax.annotate("first site",(0,0),(95,-240));ax.annotate("second site s",s,(s[0]-330,s[1]+80))
+ax.annotate("far source g",g,(g[0]-250,g[1]-230))
+theta=np.linspace(0,psi,70);ax.plot(320*np.cos(theta),320*np.sin(theta),color=blue)
+ax.annotate("psi",(300,100),(365,115),color=blue)
+ax.annotate("opposite edge: |psi| + 1 deg",(800,-15),(470,-410),
+            arrowprops={"arrowstyle":"->"},fontsize=9)
+ax.set(xlim=(-150,1850),ylim=(-520,850),xlabel="x (m)",ylabel="y (m)")
+ax.set_aspect("equal");ax.grid(alpha=.12);ax.legend(frameon=False,fontsize=8,loc="upper left")
+fig.tight_layout();fig.savefig(OUT/"04_q2_worst_angle.png",dpi=180,bbox_inches="tight");plt.close(fig)
+print(OUT/"04_q2_worst_angle.png")
+
+# Q4: the elementary two-negative proof, before introducing the B-problem notation.
+fig, ax = plt.subplots(figsize=(7.2, 3.5))
+a = np.array((0.,0.)); g = np.array((8.,.1)); top = np.array((5.,.5)); bottom=np.array((5.,-.5))
+z = a + (5/8)*(g-a)
+ax.fill([0,10,10],[0,-.2,.2],color=pale,alpha=.55)
+ax.plot([a[0],g[0]],[a[1],g[1]],color=blue,lw=2)
+ax.plot([top[0],bottom[0]],[top[1],bottom[1]],color=orange,lw=3)
+for name,pt,offset in [("a: positive",a,(5,15)),("q+: negative",top,(6,4)),("q-: negative",bottom,(6,-16)),("g: assumed far",g,(-12,15)),("z",z,(-23,6))]:
+    ax.scatter(*pt,s=42,c=green if name.startswith("a") else orange if name.startswith("q") else blue,zorder=4)
+    ax.annotate(name,pt,xytext=offset,textcoords="offset points",fontsize=9)
+ax.annotate("z lies on both segments", (5,.0625), (5.55,-1.1),
+            arrowprops={"arrowstyle":"->"},fontsize=9)
+ax.set(xlim=(-.65,9.5),ylim=(-1.55,1.2),xlabel="x",ylabel="y")
+ax.grid(alpha=.12)
+fig.tight_layout();fig.savefig(OUT/"07_pair_negative_intro.png",dpi=180,bbox_inches="tight");plt.close(fig)
+print(OUT/"07_pair_negative_intro.png")
