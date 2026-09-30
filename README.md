@@ -48,6 +48,7 @@
 | `course/code_atlas/Q2_逐行伴读.md` | Q2 安全域、后验集合、包围圆、有限最坏搜索、生成器和启动脚本的逐行伴读；含可复算例与答案。 |
 | `course/code_atlas/Q3_逐行伴读.md` | Q3 全向覆盖、位置集合更新、认证清除、在线任务、模拟器与正式 HTTP 后缀的逐行伴读；含 14 道带答案训练。 |
 | `course/code_atlas/Q1_逐行伴读.md` | Q1 角楔、半平面队列、退化分类、凸包和最远点对的逐行伴读；生成器与启动脚本、带答案轨迹一并覆盖。 |
+| `course/四问源码逐行伴读_练习与答案.pdf` | 四份逐行伴读的 A4 合订本；用于离线按问题查物理行号、手算轨迹与标准答案。 |
 | `course/figures/` | 角楔、凸包、裁剪、包围圆、极小极大、插入路线和定向观测的原创教学图；新课增补公开原例数据的重绘图。 |
 | `tools/make_course_figures.py` | 使用 Matplotlib 重建基础教学图，修正裁剪直线与定向边界的几何一致性。 |
 | `tools/make_geometry_lesson_figures.py` | 重建两站测高、CGAL 五点凸包及叉积方向的四张图。 |
@@ -55,7 +56,7 @@
 | `tools/make_optimization_figures.py` | 重建旋转卡壳教学图。 |
 | `course/figures/q4_pair_probe.png` | 第 7 课锚点、两探测点、假想源及交点的几何证明图（纵轴放大）。 |
 | `tools/make_pair_probe_figure.py` | 重建第 7 课成对探测图。 |
-| `tools/build_course.py` | 将课程清单中的十一个 Markdown 文件排成主教材 PDF；需 Pandoc、XeLaTeX 和 Noto CJK 字体，可用 `COURSE_CJK_FONT_DIR` 指定字体目录。 |
+| `tools/build_course.py` | 将十一篇课程 Markdown 排成主教材 PDF、四份伴读排成配套 PDF；需 Pandoc、XeLaTeX 和 Noto CJK 字体，可用 `COURSE_CJK_FONT_DIR` 指定字体目录。 |
 | `tools/check_atlas_coverage.py` | 检查四份源码伴读是否覆盖所有非空物理行及共享依赖清单；Q3/Q4 本地与正式版共享的相同前缀只计一次。行号覆盖不等于解释正确，仍需人工核读。 |
 
 `source/` 仅恢复上传时被平铺并加序号的源码文件名和 Q1–Q4 目录，内容不作算法修改。题目 PDF、论文、数据表及私人材料不纳入仓库。
@@ -64,7 +65,7 @@
 
 主教材是 course/从经典例题到B题_七天入门教材.pdf（95 页）。编排从统一题设与七天训练开始，再按标准问题、条件、公式链、手算例、章末 B 题、带答案练习和代码定位阅读七课。第 5 课分清有限覆盖、TSP、在线插入的模型与结论；两篇综合实验再追 Q1/Q2/Q3 的难点循环、一次 Q2 固定输入和 Q3/Q4 反馈计时。每个数值轨迹都说明其输入与适用范围。四份逐行伴读均已完成；先做课内标准例，再用各题伴读回答随机行号追问。
 
-先读 course/00_怎样使用这本教材.md 的七天安排，每课遮住答案重算一般例题和 B 题，随后打开 source/ 中对应函数。source/README.md 给运行方法，examples/ 给固定种子结果。book/ 的旧 132 页版仅供技术查阅。
+先读 course/00_怎样使用这本教材.md 的七天安排，每课遮住答案重算一般例题和 B 题，随后打开 source/ 中对应函数。配套的 course/四问源码逐行伴读_练习与答案.pdf 可离线查原始行号和标准答案；按行号精确搜索则用 `course/code_atlas/` 中的 Markdown。source/README.md 给运行方法，examples/ 给固定种子结果。book/ 的旧 132 页版仅供技术查阅。
 
 ## 独立审稿与现存缺口
 

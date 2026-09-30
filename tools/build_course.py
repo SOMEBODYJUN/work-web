@@ -22,6 +22,7 @@ from xml.sax.saxutils import escape
 ROOT = Path(__file__).resolve().parents[1]
 COURSE = ROOT / "course"
 OUTPUT = COURSE / "从经典例题到B题_七天入门教材.pdf"
+ATLAS_OUTPUT = COURSE / "四问源码逐行伴读_练习与答案.pdf"
 LESSONS = [
     COURSE / "00_怎样使用这本教材.md",
     COURSE / "10_四问统一题设与模型总图.md",
@@ -35,6 +36,7 @@ LESSONS = [
     COURSE / "12_真实复算与动作计时.md",
     COURSE / "05_答辩练习与代码导航.md",
 ]
+ATLASES = [COURSE / "code_atlas" / f"Q{i}_逐行伴读.md" for i in range(1, 5)]
 
 
 def run(args: list[str], *, env: dict[str, str], cwd: Path) -> None:
@@ -52,7 +54,7 @@ def run(args: list[str], *, env: dict[str, str], cwd: Path) -> None:
 
 
 def main() -> int:
-    missing = [str(p.relative_to(ROOT)) for p in LESSONS if not p.is_file()]
+    missing = [str(p.relative_to(ROOT)) for p in LESSONS + ATLASES if not p.is_file()]
     if missing:
         raise SystemExit("缺少课程文件：" + "、".join(missing))
     for program in ("pandoc", "xelatex"):
@@ -124,40 +126,90 @@ def main() -> int:
             "\\renewcommand{\\headrulewidth}{0pt}\n",
             encoding="utf-8"
         )
+        atlas_header = work / "atlas_header.tex"
+        atlas_header.write_text(
+            header.read_text(encoding="utf-8")
+            + "\\usepackage{fvextra}\n\\setmonofont{Noto Sans CJK SC}\n"
+            + "\\sloppy\n\\emergencystretch=3em\n",
+            encoding="utf-8",
+        )
         # Relative links inside a separately downloaded PDF should still open
         # the exact repository file. Images remain relative to course/.
-        normalized = []
-        for original in LESSONS:
-            content = original.read_text(encoding="utf-8")
-            content = re.sub(
-                r"\]\(\.\./(source|examples|book)/",
-                r"](https://github.com/SOMEBODYJUN/work-web/blob/main/\1/",
-                content,
-            )
-            target = work / original.name
-            target.write_text(content, encoding="utf-8")
-            normalized.append(target)
-        pandoc = [
-            "pandoc", *(str(p) for p in normalized),
-            "-f", "markdown+tex_math_single_backslash+tex_math_dollars",
-            "--resource-path", str(COURSE),
-            "--top-level-division=chapter",
-            "--toc", "--toc-depth=1",
-            "--pdf-engine=xelatex", "-H", str(header),
-            "-V", "documentclass=report",
-            "-V", "papersize=a4",
-            "-V", "geometry:margin=20mm",
-            "-V", "fontsize=11pt",
-            "-V", "linestretch=1.2",
-            "-V", f"mainfont={serif_font}",
-            "-V", f"sansfont={sans_font}",
-            "-M", "lang=zh-CN",
-            "-M", "title=从经典例题到 B 题：七天答辩入门教材",
-            "-M", "subtitle=先学方法，再做赛题，最后读源码",
-            "-o", str(OUTPUT),
-        ]
-        run(pandoc, env=env, cwd=ROOT)
-    print(f"已生成：{OUTPUT}")
+        for chapters, output, title, subtitle in [
+            (LESSONS, OUTPUT, "从经典例题到 B 题：七天答辩入门教材", "先学方法，再做赛题，最后读源码"),
+            (ATLASES, ATLAS_OUTPUT, "四问源码逐行伴读", "公式链、程序语句与带答案练习"),
+        ]:
+            is_atlas = output == ATLAS_OUTPUT
+            normalized = []
+            for original in chapters:
+                content = original.read_text(encoding="utf-8")
+                content = re.sub(
+                    r"\]\(\.\./(source|examples|book)/",
+                    r"](https://github.com/SOMEBODYJUN/work-web/blob/main/\1/",
+                    content,
+                )
+                target = work / original.name
+                target.write_text(content, encoding="utf-8")
+                normalized.append(target)
+            if is_atlas:
+                # The atlas explanations cite physical line numbers. Include
+                # the exact source text as a searchable appendix so this PDF
+                # remains usable without an editor or a network connection.
+                appendix = work / "source_listing.md"
+                groups = {
+                    1: ["q1_solver.py", "q1_generator.py", "run.bat"],
+                    2: ["q2_solver.py", "q2_generator.py", "run.bat"],
+                    3: ["q3_local_solver.py", "q3_official_solver.py", "q3_local_simulator.py",
+                        "run_local.bat", "run_official.bat"],
+                    4: ["q4_local_solver.py", "q4_official_solver.py", "q4_local_simulator.py",
+                        "run_local.bat", "run_official.bat"],
+                }
+                listing = ["# 附录　带物理行号的原始源码", "",
+                           "前面每个 `[Lxxx]` 对应这里的原始物理行。空行也列出；"
+                           "Q3/Q4 正式版与本地版相同的前缀只印一次。",
+                           "长行在纸面折行时仍属于同一物理行。", ""]
+                for q, filenames in groups.items():
+                    for filename in filenames:
+                        source = ROOT / "source" / f"Q{q}" / filename
+                        start = (503 if q == 3 else 209) if filename.endswith("official_solver.py") else 1
+                        physical = source.read_text(encoding="utf-8").splitlines()
+                        if start > 1:
+                            listing.append(
+                                f"## `source/Q{q}/{filename}`（第 {start} 行起；前缀见本地版）"
+                            )
+                        else:
+                            listing.append(f"## `source/Q{q}/{filename}`")
+                        listing += ["", r"\begin{Verbatim}[fontsize=\scriptsize,breaklines=true,breakanywhere=true]"]
+                        listing.extend(f"{i:04d} | {line}" for i, line in enumerate(physical, 1) if i >= start)
+                        listing += [r"\end{Verbatim}", ""]
+                dep = ROOT / "source" / "requirements.txt"
+                listing += ["## `source/requirements.txt`", "",
+                            r"\begin{Verbatim}[fontsize=\scriptsize,breaklines=true,breakanywhere=true]"]
+                listing.extend(f"{i:04d} | {line}" for i, line in enumerate(dep.read_text(encoding="utf-8").splitlines(), 1))
+                listing += [r"\end{Verbatim}", ""]
+                appendix.write_text("\n".join(listing), encoding="utf-8")
+                normalized.append(appendix)
+            pandoc = [
+                "pandoc", *(str(p) for p in normalized),
+                "-f", "markdown+tex_math_single_backslash+tex_math_dollars",
+                "--resource-path", str(COURSE),
+                "--top-level-division=chapter",
+                "--toc", "--toc-depth=1",
+                "--pdf-engine=xelatex", "-H", str(atlas_header if is_atlas else header),
+                "-V", "documentclass=report",
+                "-V", "papersize=a4",
+                "-V", "geometry:margin=20mm",
+                "-V", f"fontsize={'10pt' if is_atlas else '11pt'}",
+                "-V", f"linestretch={'1.15' if is_atlas else '1.2'}",
+                "-V", f"mainfont={serif_font}",
+                "-V", f"sansfont={sans_font}",
+                "-M", "lang=zh-CN",
+                "-M", f"title={title}",
+                "-M", f"subtitle={subtitle}",
+                "-o", str(output),
+            ]
+            run(pandoc, env=env, cwd=ROOT)
+            print(f"已生成：{output}")
     return 0
 
 

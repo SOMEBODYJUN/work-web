@@ -42,6 +42,15 @@ def sections(text: str, filenames: list[str]) -> dict[str, str]:
 
 def main() -> int:
     failed = False
+    for q, local, official, prefix in (
+        ("Q3", "q3_local_solver.py", "q3_official_solver.py", 502),
+        ("Q4", "q4_local_solver.py", "q4_official_solver.py", 208),
+    ):
+        base = (ROOT / "source" / q / local).read_text(encoding="utf-8").splitlines()
+        formal = (ROOT / "source" / q / official).read_text(encoding="utf-8").splitlines()
+        if len(base) != prefix or formal[:prefix] != base:
+            print(f"{q}: local/formal shared prefix differs; annotation reuse is invalid")
+            failed = True
     for q, files in FILES.items():
         path = ATLAS / f"{q}_逐行伴读.md"
         if not path.is_file():
@@ -68,7 +77,7 @@ def main() -> int:
                 failed = True
     # The shared dependency list is explained once in the Q4 appendix.
     dependency = ROOT / "source" / "requirements.txt"
-    if dependency.is_file():
+    if dependency.is_file() and (ATLAS / "Q4_逐行伴读.md").is_file():
         chapter = sections(
             (ATLAS / "Q4_逐行伴读.md").read_text(encoding="utf-8"),
             ["requirements.txt"],
@@ -77,7 +86,12 @@ def main() -> int:
         required = {i for i, line in enumerate(lines, 1) if line.strip()}
         covered = set()
         for a, b in MARKER.findall(chapter):
-            covered.update(range(int(a), int(b or a) + 1))
+            first, last = int(a), int(b or a)
+            if last < first or last > len(lines):
+                print(f"source/requirements.txt: invalid marker [{first},{last}]")
+                failed = True
+                continue
+            covered.update(range(first, last + 1))
         missing = sorted(required - covered)
         print(f"source/requirements.txt: {len(required) - len(missing)}/{len(required)} nonblank lines covered")
         if missing:
