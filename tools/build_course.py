@@ -25,12 +25,12 @@ OUTPUT = COURSE / "从经典例题到B题_七天入门教材.pdf"
 ATLAS_OUTPUT = COURSE / "四问源码逐行伴读_练习与答案.pdf"
 LESSONS = [
     COURSE / "00_怎样使用这本教材.md",
-    COURSE / "10_四问统一题设与模型总图.md",
-    COURSE / "08_七天训练与标准解答.md",
     COURSE / "01_从坐标到凸包与角楔.md",
     COURSE / "02_直径包围圆与鲁棒选址.md",
     COURSE / "03_覆盖路径与在线决策.md",
     COURSE / "04_集合定位与定向盲区.md",
+    COURSE / "10_四问统一题设与模型总图.md",
+    COURSE / "08_七天训练与标准解答.md",
     COURSE / "09_从模型到程序的逐行追踪.md",
     COURSE / "11_关键循环的执行轨迹与答案.md",
     COURSE / "12_真实复算与动作计时.md",
@@ -120,6 +120,7 @@ def main() -> int:
         header.write_text(
             '\\XeTeXlinebreaklocale "zh"\n'
             "\\XeTeXlinebreakskip = 0pt plus 1pt\n"
+            "\\setmonofont{Noto Sans CJK SC}\n"
             "\\usepackage{fancyhdr}\n"
             "\\pagestyle{fancy}\\fancyhf{}\n"
             "\\fancyfoot[C]{\\thepage}\n"
@@ -129,7 +130,7 @@ def main() -> int:
         atlas_header = work / "atlas_header.tex"
         atlas_header.write_text(
             header.read_text(encoding="utf-8")
-            + "\\usepackage{fvextra}\n\\setmonofont{Noto Sans CJK SC}\n"
+            + "\\usepackage{fvextra}\n"
             + "\\sloppy\n\\emergencystretch=3em\n",
             encoding="utf-8",
         )
