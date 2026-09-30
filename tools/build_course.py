@@ -15,6 +15,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from xml.sax.saxutils import escape
 
@@ -54,7 +55,10 @@ def run(args: list[str], *, env: dict[str, str], cwd: Path) -> None:
 
 
 def main() -> int:
-    missing = [str(p.relative_to(ROOT)) for p in LESSONS + ATLASES if not p.is_file()]
+    if any(arg != "--main-only" for arg in sys.argv[1:]):
+        raise SystemExit("用法：python3 tools/build_course.py [--main-only]")
+    main_only = "--main-only" in sys.argv[1:]
+    missing = [str(p.relative_to(ROOT)) for p in LESSONS + ([] if main_only else ATLASES) if not p.is_file()]
     if missing:
         raise SystemExit("缺少课程文件：" + "、".join(missing))
     for program in ("pandoc", "xelatex"):
@@ -136,10 +140,11 @@ def main() -> int:
         )
         # Relative links inside a separately downloaded PDF should still open
         # the exact repository file. Images remain relative to course/.
-        for chapters, output, title, subtitle in [
+        outputs = [
             (LESSONS, OUTPUT, "从经典例题到 B 题：七天答辩入门教材", "先学方法，再做赛题，最后读源码"),
             (ATLASES, ATLAS_OUTPUT, "四问源码逐行伴读", "公式链、程序语句与带答案练习"),
-        ]:
+        ]
+        for chapters, output, title, subtitle in outputs[:1] if main_only else outputs:
             is_atlas = output == ATLAS_OUTPUT
             normalized = []
             for original in chapters:
@@ -209,7 +214,20 @@ def main() -> int:
                 "-M", f"subtitle={subtitle}",
                 "-o", str(output),
             ]
-            run(pandoc, env=env, cwd=ROOT)
+            if is_atlas:
+                run(pandoc, env=env, cwd=ROOT)
+            else:
+                # Pandoc's built-in PDF pipeline can fail reading its own aux
+                # file on a long CJK document. Keep the TeX pass deterministic.
+                tex = work / "course_main.tex"
+                pandoc = [arg for arg in pandoc if arg != "--pdf-engine=xelatex"]
+                pandoc[-2:] = ["-o", str(tex), "-s", "-t", "latex"]
+                run(pandoc, env=env, cwd=ROOT)
+                (work / "figures").symlink_to(COURSE / "figures", target_is_directory=True)
+                for _ in range(3):
+                    run(["xelatex", "-interaction=nonstopmode", "-halt-on-error",
+                         tex.name], env=env, cwd=work)
+                shutil.copy2(work / "course_main.pdf", output)
             print(f"已生成：{output}")
     return 0
 

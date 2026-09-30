@@ -37,7 +37,7 @@
 | `course/04_集合定位与定向盲区.md` | 重编第 6–7 课：从整数读数反推相容集与交集，再到平面外包络和清除；从前半圆灯光及点积进入定向盲区，再用三角形和双负推导 Q4；新数据练习有逐步答案和对应图。 |
 | `course/05_答辩练习与代码导航.md` | 新版教材附录：按课定位 Q1–Q4 核心函数、完整调用链与闭卷口述练习；完整函数索引仍在旧版 `book/05_...`。 |
 | `course/reviews/blind_read_20260929.md` | 独立审稿人只读旧 64 页 PDF 的盲读报告；逐页记录可复做之处、断点与验收清单，页码不适用于新版。 |
-| `course/从经典例题到B题_七天入门教材.pdf` | 当前 98 页 A4 主教材，含统一题设、七课、关键循环执行轨迹、真实复算、带答案训练及逐行伴读导航。 |
+| `course/从经典例题到B题_七天入门教材.pdf` | 重排后的 117 页 A4 主教材：简短入口后先学七课，四问索引和七天带解训练置于课后，后接源码追踪与复算附录；逐行伴读另成册。 |
 | `course/08_七天训练与标准解答.md` | 七课之后的七日纸笔训练与逐步答案，题目直接围绕角楔、包围圆、极小极大、覆盖、集合更新及代码迁移。 |
 | `course/10_四问统一题设与模型总图.md` | 七课之后的四问公式索引：并列已知量、未知量、约束与目标，并给贯通练习答案。 |
 | `course/09_从模型到程序的逐行追踪.md` | 公式到四问源码的关键分支行号链，含逐句讲解、状态不变量及带答案闭卷题。 |
@@ -66,14 +66,14 @@
 | `tools/make_optimization_figures.py` | 重建旋转卡壳教学图。 |
 | `course/figures/q4_pair_probe.png` | 第 7 课锚点、两探测点、假想源及交点的几何证明图（纵轴放大）。 |
 | `tools/make_pair_probe_figure.py` | 重建第 7 课成对探测图。 |
-| `tools/build_course.py` | 将十一篇课程 Markdown 排成主教材 PDF、四份伴读排成配套 PDF；需 Pandoc、XeLaTeX 和 Noto CJK 字体，可用 `COURSE_CJK_FONT_DIR` 指定字体目录。 |
+| `tools/build_course.py` | 将十一篇课程 Markdown 排成主教材 PDF、四份伴读排成配套 PDF；主教材采用可重复的三次 XeLaTeX 编译，`--main-only` 只更新主教材。需 Pandoc、XeLaTeX 和 Noto CJK 字体，可用 `COURSE_CJK_FONT_DIR` 指定字体目录。 |
 | `tools/check_atlas_coverage.py` | 检查四份源码伴读是否覆盖所有非空物理行及共享依赖清单；Q3/Q4 本地与正式版共享的相同前缀只计一次。行号覆盖不等于解释正确，仍需人工核读。 |
 
 `source/` 仅恢复上传时被平铺并加序号的源码文件名和 Q1–Q4 目录，内容不作算法修改。题目 PDF、论文、数据表及私人材料不纳入仓库。
 
 ## 当前教材与阅读顺序
 
-当前仓库内的主教材 PDF 是上一版（98 页）；本轮教材式改写正在逐章进行。构建顺序已改为简短入口后直接上七课，四问题设索引和七日训练移到七课之后。改写完成并重新渲染 PDF 后才更新这一行的页数与成书状态。逐行伴读单独保留。
+主教材为 course/从经典例题到B题_七天入门教材.pdf（117 页）。简短入口后直接读七课，先用小数字建立通用模型，再做带答案练习与 B 题章末代换；四问总览、七日训练、源码追踪和复算放在后部。第 5 课从开放路线的六种顺序推导在线插入，再单独解释覆盖。四份逐行伴读未改动，作为课后程序查阅册。
 
 先读 course/00_怎样使用这本教材.md 的七天安排，随后从第 1 课顺序学习；每课遮住答案重算一般例题和 B 题，随后打开 source/ 中对应函数。配套的 course/四问源码逐行伴读_练习与答案.pdf 可离线查原始行号和标准答案；按行号精确搜索则用 `course/code_atlas/` 中的 Markdown。source/README.md 给运行方法，examples/ 给固定种子结果。book/ 的旧 132 页版仅供技术查阅。
 
@@ -83,4 +83,4 @@ course/reviews/blind_read_20260929.md 是独立审稿人只看旧 64 页 PDF 的
 
 ## 构建与证据边界
 
-执行 COURSE_CJK_FONT_DIR=/path/to/fonts python3 tools/build_course.py 重建 PDF；需 Pandoc、XeLaTeX、Noto Serif CJK SC 和 Noto Sans CJK SC。源码只从原上传件恢复文件名和目录，算法未修改。书中公开教材例题标明出处并用自己的文字与计算过程讲解。Q2 的有限搜索、Q3/Q4 的本地模拟与正式接口分别说明，不互相代替。
+执行 COURSE_CJK_FONT_DIR=/path/to/fonts python3 tools/build_course.py 重建两份 PDF；若只改主教材可加 `--main-only`。需 Pandoc、XeLaTeX、Noto Serif CJK SC 和 Noto Sans CJK SC。源码只从原上传件恢复文件名和目录，算法未修改。书中公开教材例题标明出处并用自己的文字与计算过程讲解。Q2 的有限搜索、Q3/Q4 的本地模拟与正式接口分别说明，不互相代替。
