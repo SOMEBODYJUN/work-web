@@ -102,6 +102,21 @@ ax.text(.7,-.3,"replace AB by A-N-B",color=ORANGE)
 ax.set_xlabel("x");ax.set_ylabel("y")
 finish(fig,ax,"06_insertion.png",(-.45,3.6),(-.55,3.5))
 
+# Open route example in Lesson 5: visit three fixed sites from O, no return.
+fig, ax = plt.subplots(figsize=(6.5, 4.3))
+route_points = {"O": (0, 0), "A": (400, 0), "B": (400, 300), "C": (0, 300)}
+for u, v in [("O", "A"), ("A", "B"), ("B", "C"), ("C", "O")]:
+    ax.plot([route_points[u][0], route_points[v][0]],
+            [route_points[u][1], route_points[v][1]], color="#b6c6d3", lw=1.4)
+for label, (x, y) in route_points.items():
+    ax.scatter([x], [y], s=64, color="#bd6b32" if label == "O" else INK, zorder=3)
+    ax.annotate(label, (x, y), xytext=(8, 8), textcoords="offset points", fontsize=13)
+for u, v in [("O", "C"), ("C", "B"), ("B", "A")]:
+    ax.annotate("", xy=route_points[v], xytext=route_points[u],
+                arrowprops=dict(arrowstyle="->", color=GREEN, lw=2.2))
+ax.set_xlabel("x (m)"); ax.set_ylabel("y (m)")
+finish(fig, ax, "05_route_open_example.png", (-75, 490), (-60, 380))
+
 fig,ax=plt.subplots(figsize=(6,4))
 src=np.array([0.,0.]); a=np.array([2.4,1.4]);b=np.array([-2.4,-1.4])
 ax.add_patch(Circle(src,2.8,fill=False,ec=BLUE,ls="--",lw=1.6))
