@@ -32,7 +32,7 @@
 
 ## 来源与存放
 
-现有章节：`00_前言与问题.md`、`01_有界观测与相容集.md`、`02_凸区域与直径.md`、`03_最小包围圆与选站.md`、`04_连续目标与有限计算.md`、`05_覆盖发现与安全清除.md`、`06_定向源与成对探测.md`。本轮尚未写完路线与七天验收，旧教材 PDF 不视为新书的一部分。
+现有正文：`00_前言与问题.md` 至 `08_七天练习与完整解答.md`。各章均为新写正文；旧教材 PDF 不视为新书的一部分。整书尚待盲读修订与实际 PDF 版面验收。
 
 - 教材写法：[清华大学出版社李工农教材介绍与目录](https://www.tup.tsinghua.edu.cn/booksCenter/book_10313201.html)；用户上传的同书单纯形法三张连续页。
 - 路线启发式的标准分类和插入费用：[MIT OpenCourseWare, Some Important Heuristics for the TSP](https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/resources/lec16/)。
