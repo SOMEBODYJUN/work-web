@@ -69,6 +69,8 @@ def main() -> None:
                                    env=env, text=True, capture_output=True, check=True).stdout
             if font not in match:
                 raise SystemExit("CJK font missing: " + font)
+        if not subprocess.run(["kpsewhich", "article.cls"], capture_output=True).stdout.strip():
+            env["TEXMF"] = "{/usr/share/texmf,/usr/share/texlive/texmf-dist}"
         if not subprocess.run(["kpsewhich", "xelatex.fmt"], env=env,
                               capture_output=True).stdout.strip():
             latex_init = Path("/usr/share/texlive/texmf-dist/tex/latex/base/latex.ltx")

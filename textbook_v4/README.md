@@ -32,7 +32,7 @@
 
 ## 来源与存放
 
-现有正文：`00_前言与问题.md` 至 `08_七天练习与完整解答.md`。各章均为新写正文；旧教材 PDF 不视为新书的一部分。整书尚待盲读修订与实际 PDF 版面验收。
+现有正文：`00_前言与问题.md` 至 `08_七天练习与完整解答.md`，合订 PDF 为 `从有界观测到在线清除_七天理论教材.pdf`。各章均为新写正文，旧教材 PDF 不视为新书的一部分。`reviews/独立盲读与修订.md` 记录本版两轮盲读发现的理论断点及修正；构建脚本位于 `tools/build_textbook_v4.py`。逐行程序练习继续使用 `course/code_atlas/`。
 
 - 教材写法：[清华大学出版社李工农教材介绍与目录](https://www.tup.tsinghua.edu.cn/booksCenter/book_10313201.html)；用户上传的同书单纯形法三张连续页。
 - 路线启发式的标准分类和插入费用：[MIT OpenCourseWare, Some Important Heuristics for the TSP](https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/resources/lec16/)。
